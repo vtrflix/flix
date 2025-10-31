@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CDNBOX | Netflix Tarzı Portal</title>
+<link rel="icon" href="assets/logo.png">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+  body { margin:0; font-family: Arial,sans-serif; background:#141414; color:#fff; }
+  header { position:fixed; top:0; left:0; width:100%; z-index:1000; display:flex; justify-content:space-between; align-items:center; padding:10px 20px; background:rgba(20,20,20,0.9);}
+  .logo { font-size:24px; font-weight:bold; color:#e50914; }
+  .hamburger { font-size:28px; cursor:pointer; background:none; border:none; color:#fff; }
+  .hamburger span { display:block; width:30px; height:4px; background:#fff; margin:5px 0; border-radius:2px; }
+  .sidebar { position:fixed; top:0; left:-250px; width:250px; height:100%; background:#141414; z-index:999; overflow-y:auto; transition:0.3s; padding-top:60px;}
+  .sidebar.active { left:0; }
+  .sidebar a { display:block; padding:12px 20px; color:#fff; text-decoration:none; border-bottom:1px solid #333; }
+  .sidebar a:hover { background:#333; }
+  .overlay { position:fixed; display:none; width:100%; height:100%; top:0; left:0; background:rgba(0,0,0,0.7); z-index:998; }
+  .overlay.active { display:block; }
+  .hero { height:400px; background:url('assets/hero-bg.jpg') center/cover no-repeat; display:flex; align-items:center; justify-content:center; text-align:center; margin-top:50px;}
+  .hero h1 { font-size:36px; margin:0; } .hero p { font-size:18px; color:#ccc; margin-top:10px; }
+  .film-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; padding:16px; margin-top:20px; }
+  .film-card { background:#222; border-radius:6px; overflow:hidden; cursor:pointer; transition: transform 0.2s; }
+  .film-card:hover { transform:scale(1.05); }
+  .film-card img { width:100%; height:230px; object-fit:cover; }
+  .film-card h3 { margin:8px; font-size:16px; }
+  .film-card p { margin:0 8px 8px 8px; font-size:14px; color:#ccc; }
+  .btn-watch { background:#e50914; color:#fff; padding:8px 12px; border:none; border-radius:4px; margin:8px; font-weight:bold; cursor:pointer; width:calc(100% - 16px); }
+  #video-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; justify-content:center; align-items:center; flex-direction:column; }
+  #video-modal video { width:90%; max-width:700px; border-radius:8px; }
+  #video-modal .close-video { position:absolute; top:20px; right:30px; font-size:28px; color:#fff; cursor:pointer; }
+  .selector { background:#222; padding:10px; border-radius:6px; margin:10px 0; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+  .selector button { background:#e50914; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold; }
+  footer { text-align:center; padding:20px; background:#141414; font-size:14px; color:#888; }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+  <center><h2><font color="#e50914">CDNBOX</font></h2></center>
+  <a href="#">🏠 Anasayfa</a>
+  <a href="#">🎬 Diziler</a>
+  <a href="#">🍿 Filmler</a>
+  <a href="#">📩 İletişim</a>
+</div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<header>
+  <div class="logo">CDNBOX</div>
+  <button class="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>En Yeni Diziler & Filmler</h1>
+    <p>Sezon ve bölümleri seçerek izle.</p>
+  </div>
+</section>
+
+<section class="film-grid" id="film-grid"></section>
+
+<div id="video-modal">
+  <span class="close-video" onclick="closeVideo()">×</span>
+  <div class="selector" id="season-selector"></div>
+  <div class="selector" id="episode-selector"></div>
+  <video id="hls-player" controls poster=""></video>
+</div>
+
+<footer>
+  <p>© 2025 cdnbox.netlify.app - Tüm Hakları Saklıdır.</p>
+</footer>
+
+<script>
+const films=[
+  {
+    title:"Midnight City",
+    genre:"Bilim Kurgu",
+    imdb:"8.2",
+    image:"assets/images/show1.jpg",
+    seasons:[
+      { season:1, episodes:[ {ep:1,watch:"https://cdnbox.netlify.app/midnightcity/s1e1.m3u8"}, {ep:2,watch:"https://cdnbox.netlify.app/midnightcity/s1e2.m3u8"} ] },
+      { season:2, episodes:[ {ep:1,watch:"https://cdnbox.netlify.app/midnightcity/s2e1.m3u8"} ] }
+    ]
+  },
+  {
+    title:"Breaking Shadows",
+    genre:"Aksiyon",
+    imdb:"7.9",
+    image:"assets/images/show2.jpg",
+    seasons:[
+      { season:1, episodes:[ {ep:1,watch:"https://cdnbox.netlify.app/breakingshadows/s1e1.m3u8"} ] }
+    ]
+  }
+];
+
+const grid=document.getElementById('film-grid');
+films.forEach((f,i)=>{
+  const card=document.createElement('div'); card.className='film-card';
+  card.innerHTML=`<img src="${f.image}" alt="${f.title}"><h3>${f.title}</h3><p>${f.genre} • IMDb ${f.imdb}</p><button class="btn-watch" onclick="selectSeason(${i})">🎥 İzle</button>`;
+  grid.appendChild(card);
+});
+
+let currentFilm=null;
+function selectSeason(index){
+  currentFilm=films[index];
+  const seasonSelector=document.getElementById('season-selector');
+  const episodeSelector=document.getElementById('episode-selector');
+  const video=document.getElementById('hls-player');
+  seasonSelector.innerHTML=''; episodeSelector.innerHTML=''; video.style.display='none';
+  currentFilm.seasons.forEach((s,i)=>{
+    const btn=document.createElement('button');
+    btn.textContent=`Sezon ${s.season}`;
+    btn.onclick=()=>selectEpisode(i);
+    seasonSelector.appendChild(btn);
+  });
+  document.getElementById('video-modal').style.display='flex';
+}
+
+function selectEpisode(seasonIndex){
+  const episodeSelector=document.getElementById('episode-selector');
+  episodeSelector.innerHTML='';
+  currentFilm.seasons[seasonIndex].episodes.forEach(ep=>{
+    const btn=document.createElement('button');
+    btn.textContent=`Bölüm ${ep.ep}`;
+    btn.onclick=()=>playVideo(ep.watch,currentFilm.image);
+    episodeSelector.appendChild(btn);
+  });
+}
+
+function playVideo(src,poster){
+  const video=document.getElementById('hls-player');
+  video.poster=poster;
+  video.style.display='block';
+  if(Hls.isSupported()){
+    var hls=new Hls(); hls.loadSource(src); hls.attachMedia(video); video.play();
+  } else if(video.canPlayType('application/vnd.apple.mpegurl')){ video.src=src; video.play(); }
+}
+
+function closeVideo(){ const modal=document.getElementById('video-modal'); const video=document.getElementById('hls-player'); video.pause(); video.src=''; modal.style.display='none'; document.getElementById('season-selector').innerHTML=''; document.getElementById('episode-selector').innerHTML=''; }
+
+function toggleSidebar(){ document.getElementById("sidebar").classList.toggle("active"); document.getElementById("overlay").classList.toggle("active"); }
+</script>
+
+</body>
+</html>
