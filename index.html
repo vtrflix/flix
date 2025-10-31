@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CDNBOX | Dizi & Film Portalı</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/logo.png">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="navbar">
+    <div class="container">
+      <div class="logo">cdnbox</div>
+
+      <!-- Hamburger -->
+      <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#">Ana Sayfa</a>
+        <a href="#">Diziler</a>
+        <a href="#">Filmler</a>
+        <a href="#">Trendler</a>
+        <a href="#">Hakkında</a>
+      </nav>
+
+      <div class="search-box">
+        <input type="text" placeholder="Film veya dizi ara...">
+        <button><i class="fa fa-search"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>En Yeni Diziler & Filmler</h1>
+      <p>Popüler içerikleri keşfet, yeni hikâyelere dal.</p>
+      <button class="hero-btn">Hemen Keşfet</button>
+    </div>
+  </section>
+
+  <!-- POPÜLER DİZİLER -->
+  <section class="movies-section">
+    <div class="section-title">🎬 Popüler Diziler</div>
+    <div class="movie-grid" id="showGrid">
+      <!-- Kartlar JS ile JSON'dan gelecek -->
+    </div>
+  </section>
+
+  <!-- YENİ FİLMLER -->
+  <section class="movies-section">
+    <div class="section-title">🍿 Yeni Filmler</div>
+    <div class="movie-grid" id="movieGrid">
+      <!-- Kartlar JS ile JSON'dan gelecek -->
+    </div>
+  </section>
+
+  <!-- MODAL HLS -->
+  <div id="videoModal" class="modal">
+    <span class="close">&times;</span>
+    <div class="episode-select" id="episodeButtons"></div>
+    <video id="videoPlayer" controls width="100%"></video>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <p>© 2025 <strong>cdnbox.netlify.app</strong> - Tüm Hakları Saklıdır.</p>
+      <p>Yapay zekâ destekli içerik platformu.</p>
+    </div>
+  </footer>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a2d9b6e64c.js" crossorigin="anonymous"></script>
+  <!-- HLS.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</body>
+</html>
