@@ -1,0 +1,204 @@
+/* Genel Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #0b0e1b; /* Astro koyu arka plan */
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+/* Container */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* HEADER */
+.navbar {
+  background-color: #0b0e1b;
+  padding: 15px 0;
+  border-bottom: 1px solid #1f2233;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.navbar .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #00d0ff; /* Astro neon mavi */
+}
+
+.nav-links a {
+  margin-left: 25px;
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #00d0ff;
+}
+
+/* Arama kutusu */
+.search-box {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.search-box input {
+  padding: 8px 12px;
+  border-radius: 25px 0 0 25px;
+  border: none;
+  outline: none;
+  width: 180px;
+}
+
+.search-box button {
+  padding: 8px 12px;
+  border-radius: 0 25px 25px 0;
+  border: none;
+  background-color: #00d0ff;
+  color: #0b0e1b;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-box button:hover {
+  background-color: #00a8cc;
+}
+
+/* HERO BÖLÜMÜ */
+.hero {
+  background: linear-gradient(180deg, rgba(11,14,27,0.9), rgba(11,14,27,0.9)), url('assets/images/hero-bg.jpg') center/cover no-repeat;
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #00d0ff;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
+.hero-btn {
+  background-color: #00d0ff;
+  color: #0b0e1b;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.hero-btn:hover {
+  background-color: #00a8cc;
+}
+
+/* BÖLÜM BAŞLIKLARI */
+.section-title {
+  font-size: 1.8rem;
+  color: #00d0ff;
+  margin: 40px 0 20px;
+  text-align: left;
+}
+
+/* MOVIE GRID */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.movie-card {
+  background-color: #1f2233;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.movie-card img {
+  width: 100%;
+  display: block;
+}
+
+.movie-card h3 {
+  margin: 10px;
+  font-size: 1.1rem;
+  color: #00d0ff;
+}
+
+.movie-card p {
+  margin: 0 10px 10px;
+  font-size: 0.9rem;
+  color: #c0c0c0;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 208, 255, 0.4);
+}
+
+/* FOOTER */
+footer {
+  background-color: #0b0e1b;
+  padding: 20px 0;
+  border-top: 1px solid #1f2233;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+footer strong {
+  color: #00d0ff;
+}
+
+/* RESPONSIVE */
+@media screen and (max-width: 768px) {
+  .nav-links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+
+  .nav-links a {
+    margin: 8px 0;
+  }
+
+  .search-box {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+}
